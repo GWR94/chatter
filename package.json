@@ -4,7 +4,7 @@
   "description": "React boilerplate with TypeScript, Babel & Webpack.",
   "main": "app.ts",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "webpack-dev-server",
     "server": "ts-node server/server.ts",
     "build": "webpack"

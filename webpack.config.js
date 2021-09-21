@@ -82,7 +82,7 @@ module.exports = () => {
       }),
       new HtmlWebpackPlugin({
         template: "./public/index.html",
-        // favicon: "./public/images/favicon.png"
+        favicon: "./public/favicon.png",
       }),
     ],
     devtool: isProduction ? "source-map" : "inline-source-map",
