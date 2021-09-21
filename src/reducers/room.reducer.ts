@@ -116,7 +116,6 @@ export default (state = defaultRoomState, action: RoomActionsTypes): RoomsState 
     case ADD_MESSAGE: {
       const roomName = state.currentRoom;
       const currentRoom = state.rooms.find((room): boolean => room.name === roomName);
-      console.log(action, roomName);
       const newMessage: MessageProps = {
         type: action.type,
         messageType: action.messageType,

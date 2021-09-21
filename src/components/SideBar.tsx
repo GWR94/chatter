@@ -1,9 +1,7 @@
 import React, { useEffect, useState, FC } from "react";
 import uuid from "uuid/v4";
 import { useSelector, useDispatch } from "react-redux";
-import Badge from "@material-ui/core/Badge";
-import { Typography } from "@material-ui/core";
-import { Input, Button, InputGroup, InputGroupAddon } from "reactstrap";
+import { Typography, Button, OutlinedInput } from "@material-ui/core";
 import * as userActions from "../actions/user.action";
 import * as roomActions from "../actions/room.action";
 import { AppState, RoomsState, UsersState } from "../interfaces/components.i";
@@ -83,39 +81,47 @@ const SideBar: FC = (): JSX.Element => {
           <div className="sidebar__users-container">
             {rooms.map(
               (room): JSX.Element => (
-                <Badge
-                  badgeContent={room.activeUsers}
-                  color="secondary"
-                  className="sidebar__badge"
+                <div
+                  className="sidebar__user"
+                  tabIndex={0}
+                  role="button"
+                  key={room.name}
+                  onClick={(): void => onChangeRoom(room.name)}
                 >
-                  <div
-                    className="sidebar__user"
-                    tabIndex={0}
-                    role="button"
-                    key={room.name}
-                    onClick={(): void => onChangeRoom(room.name)}
-                  >
-                    {room.name}
-                  </div>
-                </Badge>
+                  {room.name}
+                </div>
               ),
             )}
           </div>
         </div>
         <div className="sidebar__users-container">
           <h4 className="sidebar__create-title">Create Room</h4>
-          <InputGroup>
-            <Input
+          <div className="sidebar__input--container">
+            <OutlinedInput
               placeholder="Room name..."
               value={newRoom}
+              margin="dense"
+              classes={{
+                root: "sidebar__input",
+              }}
               onChange={(e): void => setNewRoom(e.target.value)}
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+              }}
             />
-            <InputGroupAddon addonType="append">
-              <Button color="primary" onClick={onCreateRoom}>
-                Create
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
+            <Button
+              variant="contained"
+              onClick={onCreateRoom}
+              style={{
+                height: "100%",
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+              }}
+            >
+              Create
+            </Button>
+          </div>
         </div>
       </div>
     </div>

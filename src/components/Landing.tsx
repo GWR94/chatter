@@ -47,10 +47,6 @@ const Landing: React.FC = (): JSX.Element => {
 
   const rooms = useSelector(({ room }: AppState): RoomProps[] => room.rooms);
 
-  const checkRoom = (room: string): boolean => {
-    console.log(rooms);
-  };
-
   const dispatch = useDispatch();
 
   /*
@@ -58,7 +54,6 @@ const Landing: React.FC = (): JSX.Element => {
   */
   const onSubmit = (): void => {
     const { name, room } = state;
-    checkRoom(room);
     /*
       Check if name & room are valid strings. If they are, then set relevant state 
       to match the strings, and set submitted state to true.

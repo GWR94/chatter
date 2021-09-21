@@ -100,3 +100,15 @@
   padding: 0 0 5px;
   margin: 20px 0 5px;
 }
+
+.sidebar__input {
+  background: #fff;
+  height: 100%;
+}
+
+.sidebar__input--container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
