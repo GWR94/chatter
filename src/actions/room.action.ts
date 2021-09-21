@@ -15,6 +15,7 @@ import {
   AddRoomAction,
   SetActiveUsersAction,
   SET_ACTIVE_USERS,
+  MessageType,
 } from "../interfaces/actions.i";
 
 export const setActiveRoom = (activeRoom: string): SetActiveRoomAction => ({
@@ -37,8 +38,14 @@ export const setSocket = (socket: Socket): SetSocketAction => ({
   socket,
 });
 
-export const addMessage = (message: Message): AddMessageAction => ({
+export const addMessage = ({
+  messageType,
+  location = false,
+  message,
+}): AddMessageAction => ({
   type: ADD_MESSAGE,
+  messageType,
+  location,
   message,
 });
 
@@ -46,7 +53,8 @@ export const clearMessages = (): ClearMessagesAction => ({
   type: CLEAR_MESSAGES,
 });
 
-export const setActiveUsers = (users: number): SetActiveUsersAction => ({
+export const setActiveUsers = (users: number, room): SetActiveUsersAction => ({
   type: SET_ACTIVE_USERS,
   users,
+  room,
 });

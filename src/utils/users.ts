@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { UserProps } from "./interfaces/user.i";
 
 export class Users {
@@ -42,7 +43,7 @@ export class Users {
 	*/
   public getUserList(room: string): string[] {
     const users = this.users.filter((user): boolean => user.activeRoom === room); // filters out all users which are not in the targeted room
-    const namesArr = users.map((user): string => user.name); // return array of users names
+    const namesArr = users.map((user): string => user.name as string); // return array of users names
     return namesArr;
   }
 }

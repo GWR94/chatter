@@ -1,22 +1,3 @@
-export const getRoomVariable = (room): string => {
-  switch (room) {
-    case "React & Redux":
-      return "react";
-    case "ES6+ JavaScript":
-      return "es6";
-    case "New Frameworks":
-      return "frameworks";
-    case "Discuss":
-      return "discuss";
-    case "Design Ideas":
-      return "design";
-    case "Chill Zone":
-      return "chill";
-    default:
-      return room.split(" ")[0];
-  }
-};
-
 export class Room {
   public name: string;
   public activeUsers: number;

@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(express.static(publicPath));
 
-  app.get("*", (req: Request, res: Response): void => {
+  app.get("*", (_req: Request, res: Response): void => {
     res.sendFile(path.join(publicPath, "index.html"));
   });
 }

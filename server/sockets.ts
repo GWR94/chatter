@@ -67,8 +67,8 @@ module.exports = (app): void => {
       const { name } = user;
       const { text } = message;
       if (user && isRealString(text)) {
-        socket.broadcast.emit("newMessage", generateMessage(name, text));
-        socket.emit("newMessageSent", generateMessage(name, text));
+        socket.broadcast.emit("newMessage", generateMessage(name as string, text));
+        socket.emit("newMessageSent", generateMessage(name as string, text));
       }
       callback();
     });
@@ -84,11 +84,11 @@ module.exports = (app): void => {
       if (user) {
         socket.broadcast.emit(
           "newLocationMessage",
-          generateLocationMessage(name, latitude, longitude),
+          generateLocationMessage(name as string, latitude, longitude),
         );
         socket.emit(
           "newLocationMessageSent",
-          generateLocationMessage(name, latitude, longitude),
+          generateLocationMessage(name as string, latitude, longitude),
         );
       }
     });

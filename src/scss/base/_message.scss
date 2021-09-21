@@ -1,23 +1,36 @@
-.message__title {
+.message__title--container {
   display: flex;
+  flex-direction: row;
   margin-bottom: 5px;
   justify-content: space-between;
+  align-items: center;
 }
 
-.message__title h4 {
-  font-weight: 600;
-  margin-right: 10px;
-  padding-right: 5px;
-  font-size: 16px;
+.message__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .message__title span {
   color: #999;
 }
 
-.message__timestamp {
-  float: right;
+.message__title--text {
   font-weight: bold;
+}
+
+.message__timestamp {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.message__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  font-size: 14px;
 }
 
 .message {

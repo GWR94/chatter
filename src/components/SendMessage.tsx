@@ -1,7 +1,9 @@
+import { Button, TextField } from "@material-ui/core";
 import React, { useState, ChangeEvent } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io";
-import { AppState } from "../store/store";
+import { AppState } from "../interfaces/components.i";
+import { openSnackbar } from "../utils/components/Notifier";
 
 const SendMessage = (): JSX.Element => {
   const [text, setText] = useState("");
@@ -24,7 +26,10 @@ const SendMessage = (): JSX.Element => {
     const locationButton = document.getElementById("send-location") as HTMLButtonElement;
 
     if (!navigator.geolocation) {
-      return alert("Geolocation not supported by your browser");
+      return openSnackbar({
+        message: "Location services not available.",
+        severity: "error",
+      });
     }
 
     locationButton.disabled = true;
@@ -42,37 +47,42 @@ const SendMessage = (): JSX.Element => {
       (): void => {
         locationButton.disabled = false;
         locationButton.innerText = "Send Location";
-        alert("Unable to fetch location");
+        openSnackbar({
+          message: "Unable to retrieve location, please try again.",
+          severity: "warning",
+        });
       },
     );
   };
 
   return (
     <div className="send__container">
-      <form className="send__form">
-        <input
+      <form className="send__form" onSubmit={(e): void => onTextSubmit(e)}>
+        <TextField
           onChange={(e: ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
           value={text}
           name="message"
+          variant="outlined"
+          className="send__input"
+          fullWidth
           placeholder="Message"
-          autoComplete="off"
         />
-        <button
+        <Button
           className="button__chatter"
           type="submit"
+          color="primary"
           onClick={(e): void => onTextSubmit(e)}
         >
           Send
-        </button>
-        <br className="visible-sm" />
-        <button
+        </Button>
+        <Button
           className="button__chatter button__location"
           id="send-location"
           onClick={onLocationPress}
           type="button"
         >
           Send Location
-        </button>
+        </Button>
       </form>
     </div>
   );

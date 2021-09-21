@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { UserProps } from "../utils/interfaces/user.i";
-import { Message } from "./components.i";
+import { Message, MessageProps } from "./components.i";
 
 export const CHANGE_ROOM = "CHANGE_ROOM";
 export const SET_SOCKET = "SET_SOCKET";
@@ -34,8 +34,12 @@ export interface SetUserAction {
 
 export interface AddMessageAction {
   type: typeof ADD_MESSAGE;
-  message: Message;
+  messageType: MessageType;
+  location?: boolean;
+  message: MessageProps;
 }
+
+export type MessageType = "message" | "message-sent" | "message-admin";
 
 export interface ClearMessagesAction {
   type: typeof CLEAR_MESSAGES;
@@ -53,4 +57,5 @@ export interface AddRoomAction {
 export interface SetActiveUsersAction {
   type: typeof SET_ACTIVE_USERS;
   users: number;
+  room: string;
 }

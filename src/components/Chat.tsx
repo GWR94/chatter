@@ -1,151 +1,121 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import uuid from "uuid/v4";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Socket } from "socket.io";
-import MessageContainer from "./Message";
+import { CircularProgress } from "@material-ui/core";
+import Message from "./Message";
+import scrollToElement from "scroll-to-element";
 import SideBar from "./SideBar";
 import SendMessage from "./SendMessage";
-import { ChatProps, ChatDispatchProps, Message } from "../interfaces/components.i";
-import {
-  SetSocketAction,
-  SetUserAction,
-  AddMessageAction,
-  ClearMessagesAction,
-  ChangeRoomAction,
-  SetActiveRoomAction,
-} from "../interfaces/actions.i";
-import { UserProps } from "../utils/interfaces/user.i";
+import { ChatProps, RoomsState, UsersState, AppState, Message as MessageInterface, MessageProps } from "../interfaces/components.i";
 import * as roomActions from "../actions/room.action";
 import * as userActions from "../actions/user.action";
-import { getRoomVariable } from "../utils/room";
+import { generateMessage } from "../utils/message";
 
-class Chat extends Component<ChatProps, {}> {
-  public readonly state = {
-    socket: null,
-  };
+const Chat: React.FC<ChatProps> = (): JSX.Element => {
+  const dispatch = useDispatch();
 
-  public socket: Socket;
+  const { rooms } = useSelector(({ room }: AppState): RoomsState => room);
+  const { name, activeRoom } = useSelector(({ user }: AppState): UsersState => user);
 
-  public componentWillMount(): void {
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect((): (() => void) => {
+    document.title = `${activeRoom} | Chatter`;
+
     const endpoint =
       process.env.NODE_ENV === "production"
         ? "https://www.james-gower.dev"
         : "http://localhost:5000";
 
-    const {
-      setSocket,
-      setUser,
-      user: { name, activeRoom },
-      setActiveRoom,
-    } = this.props;
-
     const socket = io(endpoint);
     setSocket(socket);
-    this.setState({ socket });
-    setUser({
-      id: socket.id,
-      name,
-      activeRoom,
-    });
-    setActiveRoom(getRoomVariable(activeRoom));
+    dispatch(roomActions.setSocket(socket));
+    dispatch(
+      userActions.setUser({
+        id: socket.id,
+        name,
+        activeRoom: activeRoom as string,
+      }),
+    );
+    dispatch(roomActions.setActiveRoom(activeRoom as string));
 
     socket.on("connect", (): void => {
       socket.emit("join", { name, activeRoom }, (size): void => {
-        roomActions.setActiveUsers(size);
+        dispatch(roomActions.setActiveUsers(size, activeRoom));
       });
     });
-  }
 
-  public componentDidMount(): void {
-    const { addMessage, user } = this.props;
-    const { socket } = this.state;
-    const { activeRoom } = user;
+    socket.on("disconnect", (): void => {
+      console.log("leaving");
+      socket.emit("leaveRoom", { activeRoom, name });
+    });
 
-    document.title = `${activeRoom} | Chatter`;
+    const scrollToBottom = (): void => {
+      const messages = document.getElementById("messages");
+      if (messages) {
+        messages.scrollTop = messages.scrollHeight;
+      }
+    };
 
     socket.on("newMessage", (message): void => {
-      addMessage({ type: "message", message });
-      this.scrollToBottom();
+      dispatch(roomActions.addMessage({ messageType: "message", message }));
+      scrollToBottom();
     });
 
     socket.on("newMessageSent", (message): void => {
-      addMessage({ type: "message-sent", message });
-      this.scrollToBottom();
+      dispatch(roomActions.addMessage({ messageType: "message-sent", message }));
+      scrollToBottom();
     });
 
     socket.on("newMessageAdmin", (message): void => {
-      addMessage({ type: "message-admin", message });
-      this.scrollToBottom();
+      dispatch(roomActions.addMessage({ messageType: "message-admin", message }));
+      scrollToBottom();
     });
 
     socket.on("newLocationMessage", (message): void => {
-      addMessage({ type: "message", location: true, message });
-      this.scrollToBottom();
+      dispatch(
+        roomActions.addMessage({ messageType: "message", location: true, message }),
+      );
+      scrollToBottom();
     });
 
     socket.on("newLocationMessageSent", (message): void => {
-      addMessage({ type: "message-sent", location: true, message });
-      this.scrollToBottom();
+      dispatch(
+        roomActions.addMessage({ messageType: "message-sent", location: true, message }),
+      );
+      scrollToBottom();
     });
-  }
 
-  public componentWillUnmount(): void {
-    const { socket } = this.state;
-    socket.on("disconnect", (): void => {
-      console.log("Disconnected from server");
-    });
-  }
+    return (): void => {
+      socket.emit("disconnect", (): void => {
+        socket.leaveAll();
+        console.log("Disconnected from server");
+      });
+    };
+  }, []);
 
-  // FIXME PROP TYPES FOR COMPONENTS
 
-  public scrollToBottom = (): void => {};
+  const messages: MessageProps[] = activeRoom
+    ? rooms.find((room): boolean => room.name === activeRoom)?.messages as MessageProps[]
+    : [];
 
-  public render(): JSX.Element {
-    const { messages } = this.props;
-    return (
-      <div className="chat__container">
-        <SideBar />
-        <div className="chat__main">
-          <div id="messages" className="chat__messages">
-            {messages.map(
-              (message): JSX.Element => (
-                <MessageContainer {...message} key={uuid()} />
-              ),
-            )}
-          </div>
-          <SendMessage />
+  return socket !== null ? (
+    <div className="chat__container">
+      {messages && <SideBar />}
+      <div className="chat__main">
+        <div id="messages" className="chat__messages">
+          {
+            messages?.length > 0 &&
+            messages.map((message): JSX.Element => <Message {...message} key={uuid()} />)}
         </div>
+        <SendMessage />
       </div>
-    );
-  }
-}
+    </div>
+  ) : (
+    <CircularProgress />
+  );
+};
 
-const mapStateToProps = ({
-  user,
-  user: { activeRoom: current },
-  room: { activeRoom, rooms, socket },
-}): ChatProps => ({
-  user,
-  activeRoom,
-  rooms,
-  socket,
-  messages: current ? rooms[getRoomVariable(current)].messages : [],
-});
-
-const mapDispatchToProps = (dispatch): ChatDispatchProps => ({
-  setSocket: (socket: Socket): SetSocketAction => dispatch(roomActions.setSocket(socket)),
-  setUser: (user: UserProps): SetUserAction => dispatch(userActions.setUser(user)),
-  addMessage: (message: Message): AddMessageAction =>
-    dispatch(roomActions.addMessage(message)),
-  clearMessages: (): ClearMessagesAction => dispatch(roomActions.clearMessages()),
-  changeRoom: (activeRoom): ChangeRoomAction =>
-    dispatch(roomActions.changeRoom(activeRoom)),
-  setActiveRoom: (activeRoom): SetActiveRoomAction =>
-    dispatch(roomActions.setActiveRoom(activeRoom)),
-});
-
-export default connect<ChatProps, ChatDispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Chat);
+export default Chat;
