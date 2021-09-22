@@ -12,7 +12,6 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
-  target: "node",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
