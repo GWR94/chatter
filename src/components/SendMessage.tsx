@@ -1,11 +1,16 @@
-import { Button, OutlinedInput, TextField } from "@material-ui/core";
+import { Button, OutlinedInput, TextField, useMediaQuery } from "@material-ui/core";
 import React, { useState, ChangeEvent } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io";
 import { AppState } from "../interfaces/components.i";
 import { openSnackbar } from "../utils/components/Notifier";
+import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
+import { LocationOnOutlined, MessageOutlined, SendOutlined } from "@material-ui/icons";
 
+const breakpoints = createBreakpoints({});
 const SendMessage = (): JSX.Element => {
+  const mobile = useMediaQuery(breakpoints.only("xs"));
+
   const [text, setText] = useState("");
   const socket = useSelector(({ room }: AppState): Socket => room.socket);
 
@@ -23,8 +28,6 @@ const SendMessage = (): JSX.Element => {
   };
 
   const onLocationPress = (): void => {
-    const locationButton = document.getElementById("send-location") as HTMLButtonElement;
-
     if (!navigator.geolocation) {
       return openSnackbar({
         message: "Location services not available.",
@@ -32,21 +35,14 @@ const SendMessage = (): JSX.Element => {
       });
     }
 
-    locationButton.disabled = true;
-    locationButton.innerText = "Sending Location...";
-
     return navigator.geolocation.getCurrentPosition(
       (position): void => {
-        locationButton.disabled = false;
-        locationButton.innerText = "Send Location";
         socket.emit("createLocationMessage", {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
       },
       (): void => {
-        locationButton.disabled = false;
-        locationButton.innerText = "Send Location";
         openSnackbar({
           message: "Unable to retrieve location, please try again.",
           severity: "warning",
@@ -65,8 +61,10 @@ const SendMessage = (): JSX.Element => {
           classes={{
             root: "send__input",
           }}
+          style={{ marginLeft: 3 }}
           fullWidth
           placeholder="Enter message..."
+          endAdornment={<LocationOnOutlined onClick={onLocationPress} />}
         />
         <Button
           className="button__chatter"
@@ -76,14 +74,14 @@ const SendMessage = (): JSX.Element => {
         >
           Send
         </Button>
-        <Button
+        {/* <Button
           className="button__chatter button__location"
           id="send-location"
           onClick={onLocationPress}
           type="button"
         >
-          Send Location
-        </Button>
+          {!mobile ? "Send Location" : <SendOutlined />}
+        </Button> */}
       </form>
     </div>
   );

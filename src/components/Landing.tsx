@@ -9,6 +9,7 @@ import { isRealString } from "../utils/validation";
 import { AppState, LandingState, RoomsState } from "../interfaces/components.i";
 import { RoomProps } from "../utils/interfaces/room.i";
 
+// room options
 const options = [
   {
     title: "React & Redux",
@@ -107,6 +108,7 @@ const Landing: React.FC = (): JSX.Element => {
             helperText={nameError}
             error={!!nameError}
             onChange={onNameChange}
+            style={{ marginBottom: 8 }}
           />
           <Autocomplete
             id="roomInput"
@@ -132,13 +134,6 @@ const Landing: React.FC = (): JSX.Element => {
             Join {room}
           </Button>
         </Paper>
-        {/* Below are the error tooltips which fire when there is an error in the form input */}
-        {/* <Tooltip placement="top" isOpen={nameError} target="nameInput">
-            Please insert a valid display name.
-          </Tooltip>
-          <Tooltip placement="bottom" isOpen={roomError} target="roomInput">
-            Please insert a valid room name
-          </Tooltip> */}
       </div>
     );
   }

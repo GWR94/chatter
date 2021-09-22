@@ -26,18 +26,7 @@
 }
 
 .button__chatter {
-  background: #265f82;
   cursor: pointer;
-  transition: background 0.3s ease;
-  border: none;
-  color: #fff;
   padding: 10px;
   margin: 0 5px;
-  &:hover {
-    background: #1f4c69;
-  }
-  &:disabled {
-    cursor: default;
-    background: #698ea5;
-  }
 }

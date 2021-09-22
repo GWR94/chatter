@@ -5,13 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Socket } from "socket.io";
 import { CircularProgress } from "@material-ui/core";
 import Message from "./Message";
-import scrollToElement from "scroll-to-element";
 import SideBar from "./SideBar";
 import SendMessage from "./SendMessage";
-import { ChatProps, RoomsState, UsersState, AppState, Message as MessageInterface, MessageProps } from "../interfaces/components.i";
+import { ChatProps, RoomsState, UsersState, AppState, MessageProps } from "../interfaces/components.i";
 import * as roomActions from "../actions/room.action";
 import * as userActions from "../actions/user.action";
-import { generateMessage } from "../utils/message";
 
 const Chat: React.FC<ChatProps> = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -23,15 +21,17 @@ const Chat: React.FC<ChatProps> = (): JSX.Element => {
 
   useEffect((): (() => void) => {
     document.title = `${activeRoom} | Chatter`;
-
+    // retrieve endpoint based on NODE_ENV
     const endpoint =
       process.env.NODE_ENV === "production"
-        ? "https://www.james-gower.dev"
+        ? "https://node-chatter-app.herokuapp.com/"
         : "http://localhost:5000";
 
     const socket = io(endpoint);
+    // set socket into store and state
     setSocket(socket);
     dispatch(roomActions.setSocket(socket));
+    // set user into store with room
     dispatch(
       userActions.setUser({
         id: socket.id,
@@ -39,48 +39,50 @@ const Chat: React.FC<ChatProps> = (): JSX.Element => {
         activeRoom: activeRoom as string,
       }),
     );
+    // dispatch room action to show 
     dispatch(roomActions.setActiveRoom(activeRoom as string));
-
+    // connect to socket
     socket.on("connect", (): void => {
       socket.emit("join", { name, activeRoom }, (size): void => {
+        // update active users based on room size
         dispatch(roomActions.setActiveUsers(size, activeRoom));
       });
     });
-
+    // emit event when user disconnects
     socket.on("disconnect", (): void => {
       console.log("leaving");
       socket.emit("leaveRoom", { activeRoom, name });
     });
-
+    // function to scroll to bottom of page when message is sent
     const scrollToBottom = (): void => {
       const messages = document.getElementById("messages");
       if (messages) {
         messages.scrollTop = messages.scrollHeight;
       }
     };
-
+    // emit event when another message is received
     socket.on("newMessage", (message): void => {
       dispatch(roomActions.addMessage({ messageType: "message", message }));
       scrollToBottom();
     });
-
+    // emit event when current user sends a message
     socket.on("newMessageSent", (message): void => {
       dispatch(roomActions.addMessage({ messageType: "message-sent", message }));
       scrollToBottom();
     });
-
+    // emit event when admin sends message
     socket.on("newMessageAdmin", (message): void => {
       dispatch(roomActions.addMessage({ messageType: "message-admin", message }));
       scrollToBottom();
     });
-
+    // emit event when location message is received
     socket.on("newLocationMessage", (message): void => {
       dispatch(
         roomActions.addMessage({ messageType: "message", location: true, message }),
       );
       scrollToBottom();
     });
-
+    // emit event when user sends location message
     socket.on("newLocationMessageSent", (message): void => {
       dispatch(
         roomActions.addMessage({ messageType: "message-sent", location: true, message }),
@@ -96,7 +98,7 @@ const Chat: React.FC<ChatProps> = (): JSX.Element => {
     };
   }, []);
 
-
+  // retrieve messages from current room
   const messages: MessageProps[] = activeRoom
     ? rooms.find((room): boolean => room.name === activeRoom)?.messages as MessageProps[]
     : [];

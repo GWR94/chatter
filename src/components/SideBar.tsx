@@ -1,20 +1,31 @@
 import React, { useEffect, useState, FC } from "react";
 import uuid from "uuid/v4";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Button, OutlinedInput } from "@material-ui/core";
+import {
+  Typography,
+  Button,
+  OutlinedInput,
+  SwipeableDrawer,
+  useMediaQuery,
+  ClickAwayListener,
+} from "@material-ui/core";
 import * as userActions from "../actions/user.action";
 import * as roomActions from "../actions/room.action";
 import { AppState, RoomsState, UsersState } from "../interfaces/components.i";
+import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
+
+const breakpoints = createBreakpoints({});
 
 const SideBar: FC = (): JSX.Element => {
   const [users, setUsers] = useState([]);
   const [newRoom, setNewRoom] = useState("");
-  const [isOpen, setOpen] = useState(true);
+  const [isOpen, setOpen] = useState(false);
 
   const { name, activeRoom } = useSelector(({ user }: AppState): UsersState => user);
   const { rooms, socket } = useSelector(({ room }: AppState): RoomsState => room);
 
   const dispatch = useDispatch();
+  const mobile = useMediaQuery(breakpoints.only("xs"));
 
   const onChangeRoom = (newRoom: string): void => {
     // socket.leave(activeRoom);
@@ -45,17 +56,21 @@ const SideBar: FC = (): JSX.Element => {
 
   useEffect((): void => {
     socket.on("updateUserList", (usersArr, room): void => {
+      console.log(usersArr);
       dispatch(roomActions.setActiveUsers(usersArr.length, room));
       setUsers(usersArr);
     });
 
-    socket.on("leaveRoom", () => {
+    socket.on("leaveRoom", (): void => {
       console.log(socket.id);
     });
   }, []);
 
   return (
-    <div className="sidebar__outer-container">
+    <div
+      className="sidebar__outer-container"
+      style={{ position: mobile ? "absolute" : "relative" }}
+    >
       <div className="sidebar__icon-container">
         <i
           className="fas fa-arrows-alt-h sidebar__icon"
@@ -64,7 +79,11 @@ const SideBar: FC = (): JSX.Element => {
           tabIndex={0}
         />
       </div>
-      <div className="sidebar__container" id="sidebar">
+      <div
+        className="sidebar__container"
+        id="sidebar"
+        style={{ width: mobile ? 0 : 300 }}
+      >
         <div className="sidebar__header">Chatter</div>
         <Typography className="sidebar__title">Users</Typography>
         <div className="sidebar__users-container">

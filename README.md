@@ -1,26 +1,36 @@
 # Chatter
 
+![Chatter](src/images/chatter.jpg)
+## Table of Contents
+  - [General Information](#general-information)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Join a Room](#joining-a-room)
+  - [Chat Features](#chat-features)
+  - [Technologies](#technologies)
+  - [Status](#status)
+  - [Todo](#todo)
+
+## General Information
+
 Chatter is a chat application which was built to bring developers together in 
 discussing the latest technologies used in the JavaScript world. 
 There are many chat rooms to choose from, such as React & Redux, ES6+ JavaScript, 
 New Frameworks, Discuss, Design Ideas & finally a Chill Zone. 
 You can also create an unlimited amount of rooms by using the textbox provided, 
 and getting your peers to join the same room!
-
 ## Installation
 
-If you are looking to view/make changes to the existing codebase, then cloning the 
-repository is the best way to achieve this. To do this navigate to a suitable directory, 
-and run `git clone https://github.com/jamesgower/chatter.git` from the terminal. 
-Once the repository is cloned, you can navigate to the repository and run `npm install` 
-to install all of the dependencies. To run the application, you can run `npm run dev` 
-from the root directory, and a local version of the application can be accessed from 
-accessing localhost:8080 from your browser.
+If you are looking to view/make changes to the existing codebase, then cloning the repository is the best way to achieve this. 
+
+To do this navigate to a suitable directory, and run `git clone https://github.com/jamesgower/chatter.git` from the terminal. 
+
+Once the repository is cloned, you can navigate to the repository and run `npm install` to install all of the dependencies. To run the application, you can run `npm run dev` from the root directory, and a local version of the can be accessed from accessing localhost:8080 from your browser.
 
 ## Usage
 
 To use the application, it can be accessed from 
-[this](https://www.james-gower.dev/chatter), or by installing it with the above method.
+[this](https://node-chatter-app.herokuapp.com/) link (https://node-chatter-app.herokuapp.com/), or by installing it with the above method.
 
 ### Joining a Room
 
@@ -34,28 +44,20 @@ Pressing the "Send Location" button will send a link to all others in the chat r
 
 ## Technologies
 
-### Front-End
-
 - React
 - Redux
 - TypeScript
 - Reactstrap
 - Socket.IO-Client
 - WebSockets
-
-### Back-End
-
 - Express (Node.js)
 - Axios
-- Concurrently
 - Socket.IO
 
-### Deployment
+## Status
 
-- Heroku
+The application is in a working state, but there are features which need to be implemented to be considered a finished product. Updates will be made in due course.
 
-### Testing
+## Todo
 
-- Expect
-- Mocha
-- Jest
+Testing needs to be refactored and uploaded since refactoring and upgrading the application.
