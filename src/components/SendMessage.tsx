@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, OutlinedInput, TextField } from "@material-ui/core";
 import React, { useState, ChangeEvent } from "react";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io";
@@ -58,14 +58,15 @@ const SendMessage = (): JSX.Element => {
   return (
     <div className="send__container">
       <form className="send__form" onSubmit={(e): void => onTextSubmit(e)}>
-        <TextField
+        <OutlinedInput
           onChange={(e: ChangeEvent<HTMLInputElement>): void => setText(e.target.value)}
           value={text}
           name="message"
-          variant="outlined"
-          className="send__input"
+          classes={{
+            root: "send__input",
+          }}
           fullWidth
-          placeholder="Message"
+          placeholder="Enter message..."
         />
         <Button
           className="button__chatter"

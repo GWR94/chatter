@@ -17,12 +17,14 @@
 }
 
 .message__title--text {
-  font-weight: bold;
+  font-weight: bold !important;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .message__timestamp {
-  font-weight: bold;
-  font-style: italic;
+  font-weight: bold !important;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.8rem !important;
 }
 
 .message__icon {

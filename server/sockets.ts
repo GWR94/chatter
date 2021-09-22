@@ -3,7 +3,7 @@ const { generateMessage, generateLocationMessage } = require("../src/utils/messa
 const { isRealString } = require("../src/utils/validation");
 const { Users } = require("../src/utils/users");
 
-module.exports = (app) => {
+module.exports = (app): void => {
   const server = require("http").Server(app);
 
   const io = socketIO(server);

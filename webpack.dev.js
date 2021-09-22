@@ -32,7 +32,10 @@ module.exports = merge(common, {
     ],
   },
   devServer: {
-    contentBase: path.join(__dirname, "public"),
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
+    compress: true,
     historyApiFallback: true,
     port: 3000,
   },
