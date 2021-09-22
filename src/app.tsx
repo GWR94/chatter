@@ -6,7 +6,6 @@ import ReactDOM from "react-dom";
 import Landing from "./components/Landing";
 import configureStore from "./store/store";
 import "./scss/styles.scss";
-import "bootstrap-css-only/css/bootstrap.min.css";
 
 declare global {
   interface Window {

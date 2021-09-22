@@ -1,5 +1,4 @@
-import express, { Response, Request } from "express";
-
+const express = require("express");
 const path = require("path");
 
 const app = express();
@@ -11,7 +10,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(express.static(publicPath));
 
-  app.get("*", (_req: Request, res: Response): void => {
+  app.get("*", (_req, res) => {
     res.sendFile(path.join(publicPath, "index.html"));
   });
 }

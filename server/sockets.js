@@ -1,9 +1,9 @@
-import socketIO from "socket.io";
-import { generateMessage, generateLocationMessage } from "../src/utils/message";
-import { isRealString } from "../src/utils/validation";
-import { Users } from "../src/utils/users";
+const socketIO = require("socket.io");
+const { generateMessage, generateLocationMessage } = require("../src/utils/message");
+const { isRealString } = require("../src/utils/validation");
+const { Users } = require("../src/utils/users");
 
-module.exports = (app): void => {
+module.exports = (app) => {
   const server = require("http").Server(app);
 
   const io = socketIO(server);
@@ -12,10 +12,10 @@ module.exports = (app): void => {
       The io.on connection function is the manager which controls all connections and messages in
       the whole application. It will log a statement when a new user is connected to any room.
   */
-  io.on("connection", (socket): void => {
+  io.on("connection", (socket) => {
     console.log(`New user connected at socket ${socket.id}`);
 
-    socket.on("join", (params): void => {
+    socket.on("join", (params) => {
       const { activeRoom, user } = params;
       let { name } = params;
       /*
@@ -25,8 +25,7 @@ module.exports = (app): void => {
       */
       if (users.getUserList(activeRoom).indexOf(name) > -1) {
         const usersArr = users.getUserList(activeRoom);
-        const matches = usersArr.filter((currentUser): boolean => user !== currentUser)
-          .length;
+        const matches = usersArr.filter((currentUser) => user !== currentUser).length;
         name = `${name}[${matches}]`;
       }
       /*
@@ -62,13 +61,13 @@ module.exports = (app): void => {
           The socket.on createMessage function emits an event which both sends a message which shows as a blue message, sent
           from the user to all others in the room; and a green message, which shows up to other users as a received message.
       */
-    socket.on("createMessage", (message, callback): void => {
+    socket.on("createMessage", (message, callback) => {
       const user = users.getUser(socket.id);
       const { name } = user;
       const { text } = message;
       if (user && isRealString(text)) {
-        socket.broadcast.emit("newMessage", generateMessage(name as string, text));
-        socket.emit("newMessageSent", generateMessage(name as string, text));
+        socket.broadcast.emit("newMessage", generateMessage(name, text));
+        socket.emit("newMessageSent", generateMessage(name, text));
       }
       callback();
     });
@@ -78,17 +77,17 @@ module.exports = (app): void => {
           which shows as a blue message, sent from the user to all others in the room; and a green location message, which shows up to other users 
           as a received message.
       */
-    socket.on("createLocationMessage", ({ latitude, longitude }): void => {
+    socket.on("createLocationMessage", ({ latitude, longitude }) => {
       const user = users.getUser(socket.id);
       const { name } = user;
       if (user) {
         socket.broadcast.emit(
           "newLocationMessage",
-          generateLocationMessage(name as string, latitude, longitude),
+          generateLocationMessage(name, latitude, longitude),
         );
         socket.emit(
           "newLocationMessageSent",
-          generateLocationMessage(name as string, latitude, longitude),
+          generateLocationMessage(name, latitude, longitude),
         );
       }
     });
@@ -98,7 +97,7 @@ module.exports = (app): void => {
           when a user leaves. It also emits a red message, which looks like it comes from the administrator,
           saying that the user has left the room.
       */
-    socket.on("disconnect", (): void => {
+    socket.on("disconnect", () => {
       const user = users.removeUser(socket.id);
       const { activeRoom, name } = user;
       if (user) {
@@ -113,7 +112,7 @@ module.exports = (app): void => {
 
   const port = process.env.PORT || 5000;
 
-  server.listen(port, (): void => {
+  server.listen(port, () => {
     console.log("Server is up at port", port);
   });
 };
