@@ -5,10 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
-  entry: {
-    index: "./src/app.tsx",
-    server: "./server/server.ts",
-  },
+  entry: ["./src/app.tsx", "./server/server.ts"],
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
