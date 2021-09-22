@@ -17,20 +17,20 @@ module.exports = merge(common, {
   node: {
     global: true,
   },
-  // resolve: {
-  //   fallback: {
-  //     path: require.resolve("path-browserify"),
-  //     http: require.resolve("stream-http"),
-  //     crypto: require.resolve("crypto-browserify"),
-  //     zlib: require.resolve("browserify-zlib"),
-  //     buffer: require.resolve("buffer/"),
-  //     util: require.resolve("util/"),
-  //     stream: require.resolve("stream-browserify"),
-  //     assert: require.resolve("assert/"),
-  //     fs: false,
-  //     net: false,
-  //   },
-  // },
+  resolve: {
+    fallback: {
+      path: require.resolve("path-browserify"),
+      http: require.resolve("stream-http"),
+      crypto: require.resolve("crypto-browserify"),
+      zlib: require.resolve("browserify-zlib"),
+      buffer: require.resolve("buffer/"),
+      util: require.resolve("util/"),
+      stream: require.resolve("stream-browserify"),
+      assert: require.resolve("assert/"),
+      fs: false,
+      net: false,
+    },
+  },
   optimization: {
     runtimeChunk: "single",
     // splitChunks: {
