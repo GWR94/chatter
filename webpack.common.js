@@ -10,11 +10,11 @@ module.exports = {
     server: "./server/server.js",
   },
   resolve: {
-    extensions: [".mjs", ".ts", ".tsx", ".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].[hash].js",
+    filename: "[name].bundle.js",
   },
   module: {
     rules: [
@@ -28,12 +28,6 @@ module.exports = {
         use: ["source-map-loader"],
         enforce: "pre",
         exclude: [path.resolve(__dirname, "./node_modules")],
-      },
-      {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false,
-        },
       },
     ],
   },
