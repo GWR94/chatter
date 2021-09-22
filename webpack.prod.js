@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const common = require("./webpack.common");
 const path = require("path");
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = merge(common, {
   mode: "production",
@@ -13,50 +14,48 @@ module.exports = merge(common, {
     }),
   ],
   target: "node",
-  externals: {
-    express: "express",
-  },
+  externals: [nodeExternals()],
   node: {
     global: true,
   },
-  resolve: {
-    fallback: {
-      path: require.resolve("path-browserify"),
-      http: require.resolve("stream-http"),
-      crypto: require.resolve("crypto-browserify"),
-      zlib: require.resolve("browserify-zlib"),
-      buffer: require.resolve("buffer/"),
-      util: require.resolve("util/"),
-      stream: require.resolve("stream-browserify"),
-      assert: require.resolve("assert/"),
-      fs: false,
-      net: false,
-    },
-  },
+  // resolve: {
+  //   fallback: {
+  //     path: require.resolve("path-browserify"),
+  //     http: require.resolve("stream-http"),
+  //     crypto: require.resolve("crypto-browserify"),
+  //     zlib: require.resolve("browserify-zlib"),
+  //     buffer: require.resolve("buffer/"),
+  //     util: require.resolve("util/"),
+  //     stream: require.resolve("stream-browserify"),
+  //     assert: require.resolve("assert/"),
+  //     fs: false,
+  //     net: false,
+  //   },
+  // },
   optimization: {
     runtimeChunk: "single",
-    splitChunks: {
-      chunks: "all",
-      maxInitialRequests: Infinity,
-      minSize: 0,
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name(module) {
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-            )[1];
-            return `npm.${packageName.replace("@", "")}`;
-          },
-        },
-        styles: {
-          name: "styles",
-          test: /\.css$/,
-          chunks: "all",
-          enforce: true,
-        },
-      },
-    },
+    // splitChunks: {
+    //   chunks: "all",
+    //   maxInitialRequests: Infinity,
+    //   minSize: 0,
+    //   cacheGroups: {
+    //     vendor: {
+    //       test: /[\\/]node_modules[\\/]/,
+    //       name(module) {
+    //         const packageName = module.context.match(
+    //           /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+    //         )[1];
+    //         return `npm.${packageName.replace("@", "")}`;
+    //       },
+    //     },
+    //     styles: {
+    //       name: "styles",
+    //       test: /\.css$/,
+    //       chunks: "all",
+    //       enforce: true,
+    //     },
+    //   },
+    // },
   },
   module: {
     rules: [

@@ -1,7 +1,7 @@
 {
-  "name": "typescript-react-boilerplate",
+  "name": "chatter",
   "version": "1.0.0",
-  "description": "React boilerplate with TypeScript, Babel & Webpack.",
+  "description": "React Chat app with TypeScript, React & Webpack.",
   "main": "app.ts",
   "scripts": {
     "dev": "concurrently \"npm run start\" \"npm run client\"",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamesgower/typescript-react-boilerplate.git"
+    "url": "git+https://github.com/jamesgower/chatter.git"
   },
   "keywords": [
     "React",
@@ -22,9 +22,9 @@
   "author": "James Gower",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jamesgower/typescript-react-boilerplate/issues"
+    "url": "https://github.com/jamesgower/chatter/issues"
   },
-  "homepage": "https://github.com/jamesgower/typescript-react-boilerplate#readme",
+  "homepage": "https://github.com/jamesgower/chatter#readme",
   "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.5",
@@ -102,6 +102,7 @@
     "typescript": "^4.4.3",
     "util": "^0.12.4",
     "uuid": "^3.4.0",
-    "webpack-merge": "^5.8.0"
+    "webpack-merge": "^5.8.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
