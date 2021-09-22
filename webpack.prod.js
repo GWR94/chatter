@@ -13,7 +13,7 @@ module.exports = merge(common, {
       chunkFilename: "[id].[hash].css",
     }),
   ],
-  externals: [nodeExternals()],
+  // externals: [nodeExternals()],
   node: {
     global: true,
   },
