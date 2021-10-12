@@ -47,7 +47,7 @@ Pressing the "Send Location" button will send a link to all others in the chat r
 - React
 - Redux
 - TypeScript
-- Reactstrap
+- Material UI (MUI)
 - Socket.IO-Client
 - WebSockets
 - Express (Node.js)
