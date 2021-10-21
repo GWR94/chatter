@@ -1,6 +1,9 @@
 # Chatter
 
 ![Chatter](src/images/chatter.jpg)
+
+Open app [here](https://node-chatter-app.herokuapp.com/).
+NOTE: Chatter is hosted on Heroku's free hosting plan, so the app may take a few seconds to appear on the initial load.
 ## Table of Contents
   - [General Information](#general-information)
   - [Installation](#installation)
@@ -32,6 +35,8 @@ Once the repository is cloned, you can navigate to the repository and run `npm i
 To use the application, it can be accessed from 
 [this](https://node-chatter-app.herokuapp.com/) link (https://node-chatter-app.herokuapp.com/), or by installing it with the above method.
 
+NOTE: Chatter is hosted on Heroku's free hosting plan, so the app may take a few seconds to appear on the initial load. I am looking to change hosting providers to avoid this in the near future.
+
 ### Joining a Room
 
 When the application is opened you will be greeted with a form where you must choose a display name and a room name. Both of these fields need to be completed to enter a chat room. The display name should be a unique one to differentiate between yourself and others, otherwise the name will be edited to force this. To join a room you can either choose one of the predefined ones, or input one in the input field, and click the blue join button.
@@ -48,11 +53,11 @@ Pressing the "Send Location" button will send a link to all others in the chat r
 - Redux
 - TypeScript
 - Material UI (MUI)
+- Socket.IO
 - Socket.IO-Client
 - WebSockets
 - Express (Node.js)
 - Axios
-- Socket.IO
 
 ## Status
 
